@@ -271,7 +271,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 2rem;}
 
 /* ── CODE SNIPPET FLOATS ── */
-.code-float{position:absolute;font-family:var(--mono);font-size:11px;color:rgba(37,99,235,0.25);pointer-events:none;white-space:nowrap;animation:floatCode 18s linear infinite;}
+.code-float{position:fixed;font-family:var(--mono);font-size:11px;color:rgba(37,99,235,0.25);pointer-events:none;white-space:nowrap;animation:floatCode 18s linear infinite;}
 @keyframes floatCode{from{transform:translateY(100vh) translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}to{transform:translateY(-100px) translateX(20px);opacity:0;}}
 
 /* ── RESPONSIVE ── */
