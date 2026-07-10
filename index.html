@@ -363,8 +363,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
   <div class="section-inner">
     <div class="about-grid">
       <div class="about-photo aos-left">
-        <div class="photo-frame" onclick="document.getElementById('photoUpload').click()" title="Click to upload photo">
-          <img id="profileImg" src="David Banjo Corporate pic.jpg" alt="David Banjo"/>
+        <div class="photo-frame">
+          <img id="profileImg" src="David Banjo Corporate pic.jpg" alt="David Banjo" style="display:block;"/>
           <div class="photo-placeholder" id="photoPlaceholder" style="display:none">
             <i class="ti ti-user-circle"></i>
             <span>Click to upload photo</span>
@@ -375,7 +375,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
           <div class="photo-corner br"></div>
         </div>
         <input type="file" id="photoUpload" accept="image/*" style="display:none"/>
-        <p class="photo-upload-hint">Click the frame to add your photo</p>
       </div>
       <div class="about-content aos-right">
         <div class="section-tag"><i class="ti ti-user"></i> About Me</div>
