@@ -48,14 +48,16 @@ button{cursor:pointer;font-family:var(--font);}
 .nav-logo{font-size:15px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;letter-spacing:-0.3px;}
 .nav-logo span{background:var(--grad-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .nav-links{display:flex;gap:2rem;align-items:center;}
-.nav-links a{font-size:13px;color:var(--muted);transition:color 0.2s;font-weight:500;}
+.nav-links a{font-size:13px;color:var(--muted);transition:color 0.2s,border-color 0.2s;font-weight:500;padding-bottom:4px;border-bottom:2px solid transparent;}
 .nav-links a:hover{color:#fff;}
+.nav-links a.nav-link.active{color:#fff;border-color:var(--blue-l);}
 .nav-cta{background:var(--blue);color:#fff!important;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;transition:background 0.2s,transform 0.15s!important;}
 .nav-cta:hover{background:var(--blue-l);transform:translateY(-1px)!important;}
 .nav-hamburger{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--text);font-size:20px;}
 .mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(7,17,31,0.98);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);z-index:999;padding:1rem 2rem 1.5rem;flex-direction:column;gap:0;}
 .mobile-nav.open{display:flex;}
-.mobile-nav a{padding:0.75rem 0;font-size:15px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.05);transition:color 0.2s;}
+.mobile-nav a{padding:0.75rem 0 0.75rem 10px;font-size:15px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.05);border-left:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.mobile-nav a.nav-link.active{color:#fff;border-left-color:var(--blue-l);}
 .mobile-nav a:hover{color:#fff;}
 
 /* ── HERO ── */
@@ -186,6 +188,9 @@ button{cursor:pointer;font-family:var(--font);}
 .project-links a:hover{border-color:var(--blue);color:#fff;}
 .project-links a.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
 .project-links a.primary:hover{background:var(--blue-l);}
+.project-links a.github{background:rgba(255,255,255,0.07);border-color:var(--border-l);color:#fff;font-weight:600;}
+.project-links a.github i{font-size:15px;}
+.project-links a.github:hover{background:#fff;border-color:#fff;color:var(--bg0);}
 
 /* ── METHODOLOGY ── */
 .method-flow{display:flex;flex-direction:column;gap:0;position:relative;max-width:760px;margin:0 auto;}
@@ -220,8 +225,8 @@ button{cursor:pointer;font-family:var(--font);}
 .cert-card h4{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;}
 .cert-card .cert-src{font-size:12px;color:var(--muted);}
 .cert-badge-pill{display:inline-block;margin-top:10px;font-size:11px;padding:3px 10px;border-radius:10px;}
-.cert-badge-pill.done{background:rgba(34,197,94,0.12);color:#22c55e;}
-.cert-badge-pill.prog{background:rgba(251,191,36,0.12);color:#fbbf24;}
+.cert-badge-pill.done{background:rgba(245,158,11,0.16);color:#f59e0b;font-weight:600;}
+.cert-badge-pill.prog{background:rgba(100,116,139,0.15);color:var(--muted);}
 .cert-badge-pill.plan{background:rgba(100,116,139,0.15);color:var(--muted);}
 
 /* ── BLOG ── */
@@ -356,13 +361,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
   <div class="nav-inner">
     <a href="#hero" class="nav-logo"><i class="ti ti-shield-lock"></i> David<span>Banjo</span>.sec</a>
     <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#methodology">Methodology</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
+      <a href="#about" class="nav-link" data-section="about">About</a>
+      <a href="#services" class="nav-link" data-section="services">Services</a>
+      <a href="#skills" class="nav-link" data-section="skills">Skills</a>
+      <a href="#projects" class="nav-link" data-section="projects">Projects</a>
+      <a href="#methodology" class="nav-link" data-section="methodology">Methodology</a>
+      <a href="#blog" class="nav-link" data-section="blog">Blog</a>
+      <a href="#contact" class="nav-link" data-section="contact">Contact</a>
       <a href="#contact" class="nav-cta">Book Assessment</a>
     </div>
     <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">
@@ -371,13 +376,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
   </div>
 </nav>
 <div class="mobile-nav" id="mobileNav">
-  <a href="#about" onclick="closeMobileNav()">About</a>
-  <a href="#services" onclick="closeMobileNav()">Services</a>
-  <a href="#skills" onclick="closeMobileNav()">Skills</a>
-  <a href="#projects" onclick="closeMobileNav()">Projects</a>
-  <a href="#methodology" onclick="closeMobileNav()">Methodology</a>
-  <a href="#blog" onclick="closeMobileNav()">Blog</a>
-  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <a href="#about" class="nav-link" data-section="about" onclick="closeMobileNav()">About</a>
+  <a href="#services" class="nav-link" data-section="services" onclick="closeMobileNav()">Services</a>
+  <a href="#skills" class="nav-link" data-section="skills" onclick="closeMobileNav()">Skills</a>
+  <a href="#projects" class="nav-link" data-section="projects" onclick="closeMobileNav()">Projects</a>
+  <a href="#methodology" class="nav-link" data-section="methodology" onclick="closeMobileNav()">Methodology</a>
+  <a href="#blog" class="nav-link" data-section="blog" onclick="closeMobileNav()">Blog</a>
+  <a href="#contact" class="nav-link" data-section="contact" onclick="closeMobileNav()">Contact</a>
 </div>
 
 <!-- HERO -->
@@ -585,7 +590,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
           <p>Full penetration test of the crAPI (Completely Ridiculous API) vulnerable application, deployed via Docker — covering all OWASP API Security Top 10 categories with documented methodology and findings.</p>
           <div class="project-tags"><span class="p-tag">crAPI</span><span class="p-tag">BOLA</span><span class="p-tag">Postman</span><span class="p-tag">Burp Suite</span></div>
           <div class="project-links">
-            <a href="https://github.com/developer-Banj/crapi-api-pentest" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
+            <a href="crapi-writeup.html" class="primary"><i class="ti ti-book"></i> View</a>
+            <a href="https://github.com/developer-Banj/crapi-api-pentest" target="_blank" class="github"><i class="ti ti-brand-github"></i> GitHub</a>
           </div>
         </div>
       </div>
@@ -619,7 +625,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
           <div class="project-tags"><span class="p-tag">Python</span><span class="p-tag">XGBoost</span><span class="p-tag">NLP</span><span class="p-tag">Explainable AI</span></div>
           <div class="project-links">
             <a href="phisheye.html" class="primary"><i class="ti ti-book"></i> View</a>
-            <a href="https://github.com/developer-Banj/PhishEye" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
+            <a href="https://github.com/developer-Banj/PhishEye" target="_blank" class="github"><i class="ti ti-brand-github"></i> GitHub</a>
           </div>
         </div>
       </div>
@@ -718,35 +724,35 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
     <div class="section-tag aos"><i class="ti ti-certificate"></i> Credentials</div>
     <h2 class="section-title aos" style="transition-delay:0.1s">Certifications & <span class="grad">Badges</span></h2>
     <div class="certs-grid">
-      <a class="cert-card aos" href="https://au.apisec.ai/certifications" target="_blank">
-        <div class="cert-ico"><i class="ti ti-api"></i></div>
-        <h4>API Security Certified Professional</h4><div class="cert-src">APISEC University</div>
-        <div class="cert-badge-pill prog">In View</div>
-      </a>
-      <a class="cert-card aos" style="transition-delay:0.1s" href="https://tryhackme.com" target="_blank">
-        <div class="cert-ico"><i class="ti ti-topology-star"></i></div>
-        <h4>Jr Pen Tester Path</h4><div class="cert-src">TryHackMe</div>
-        <div class="cert-badge-pill prog">In Progress</div>
-      </a>
-      <a class="cert-card aos" style="transition-delay:0.2s" href="https://portswigger.net/web-security" target="_blank">
-        <div class="cert-ico"><i class="ti ti-bug"></i></div>
-        <h4>Web Security Academy</h4><div class="cert-src">PortSwigger</div>
-        <div class="cert-badge-pill prog">Ongoing</div>
-      </a>
-      <a class="cert-card aos" style="transition-delay:0.3s" href="https://www.isc2.org/certifications/cc" target="_blank">
+      <a class="cert-card aos" href="https://www.isc2.org/certifications/cc" target="_blank">
         <div class="cert-ico"><i class="ti ti-sword"></i></div>
         <h4>ISC2 CC</h4><div class="cert-src">ISC2</div>
-        <div class="cert-badge-pill plan">Attained</div>
+        <div class="cert-badge-pill done">Attained</div>
       </a>
-      <a class="cert-card aos" style="transition-delay:0.4s" href="https://www.offsec.com/courses/pen-200" target="_blank">
+      <a class="cert-card aos" style="transition-delay:0.1s" href="#" target="_blank">
+        <div class="cert-ico"><i class="ti ti-shield-lock"></i></div>
+        <h4>Google Cybersecurity Certificate</h4><div class="cert-src">Google</div>
+        <div class="cert-badge-pill done">Attained</div>
+      </a>
+      <a class="cert-card aos" style="transition-delay:0.2s" href="https://au.apisec.ai/certifications" target="_blank">
+        <div class="cert-ico"><i class="ti ti-api"></i></div>
+        <h4>API Penetration Testing Course</h4><div class="cert-src">APISEC University</div>
+        <div class="cert-badge-pill done">Attained</div>
+      </a>
+      <a class="cert-card aos" style="transition-delay:0.3s" href="https://portswigger.net/web-security" target="_blank">
+        <div class="cert-ico"><i class="ti ti-bug"></i></div>
+        <h4>Web Security Academy</h4><div class="cert-src">PortSwigger</div>
+        <div class="cert-badge-pill plan">Ongoing</div>
+      </a>
+      <a class="cert-card aos" style="transition-delay:0.4s" href="https://tryhackme.com" target="_blank">
+        <div class="cert-ico"><i class="ti ti-topology-star"></i></div>
+        <h4>Jr Pen Tester Path</h4><div class="cert-src">TryHackMe</div>
+        <div class="cert-badge-pill plan">In Progress</div>
+      </a>
+      <a class="cert-card aos" style="transition-delay:0.5s" href="https://www.offsec.com/courses/pen-200" target="_blank">
         <div class="cert-ico"><i class="ti ti-target"></i></div>
         <h4>OSCP</h4><div class="cert-src">Offensive Security</div>
         <div class="cert-badge-pill plan">In View</div>
-      </a>
-      <a class="cert-card aos" style="transition-delay:0.5s" href="#" target="_blank">
-        <div class="cert-ico"><i class="ti ti-shield-lock"></i></div>
-        <h4>Google Cybersecurity Certificate</h4><div class="cert-src">Google</div>
-        <div class="cert-badge-pill plan">Attained</div>
       </a>
     </div>
   </div>
@@ -995,6 +1001,27 @@ const nav=document.getElementById('mainNav');
 window.addEventListener('scroll',()=>{
   nav.classList.toggle('scrolled',window.scrollY>40);
 });
+
+/* ── SCROLLSPY — blue underline on the nav link for the section in view ── */
+const spySections=['about','services','skills','projects','methodology','blog','contact']
+  .map(id=>document.getElementById(id)).filter(Boolean);
+const navLinkEls=document.querySelectorAll('a.nav-link');
+function setActiveSection(id){
+  navLinkEls.forEach(a=>a.classList.toggle('active',a.dataset.section===id));
+}
+if('IntersectionObserver' in window && spySections.length){
+  const spyObserver=new IntersectionObserver((entries)=>{
+    // Pick the visible section closest to the top of the viewport.
+    let best=null,bestTop=Infinity;
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.boundingClientRect.top<bestTop){
+        bestTop=e.boundingClientRect.top;best=e.target.id;
+      }
+    });
+    if(best) setActiveSection(best);
+  },{rootMargin:'-96px 0px -60% 0px',threshold:0});
+  spySections.forEach(s=>spyObserver.observe(s));
+}
 
 /* ── MOBILE NAV ── */
 function toggleMobileNav(){

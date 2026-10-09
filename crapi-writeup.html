@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>crAPI Security Assessment — David Banjo</title>
+<meta name="description" content="A full penetration test of OWASP's crAPI application — 12 confirmed vulnerabilities, 9 critical, mapped to the OWASP API Security Top 10."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="assets/writeup.css"/>
+<style>
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:13px;}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);}
+th{color:#fff;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;}
+td:first-child,td:nth-child(2){color:#fff;}
+.sev{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.sev.crit{background:rgba(239,68,68,0.14);color:#f87171;}
+.sev.high{background:rgba(251,146,60,0.14);color:#fb923c;}
+.sev.med{background:rgba(251,191,36,0.14);color:#fbbf24;}
+.stat-row{display:flex;gap:2rem;flex-wrap:wrap;margin:1.75rem 0;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;flex:1;min-width:140px;}
+.stat .n{font-size:28px;font-weight:700;color:#fff;}
+.stat .l{font-size:12px;color:var(--muted);margin-top:2px;}
+.placeholder-shot{background:var(--card);border:1px dashed var(--border-l);border-radius:12px;padding:2.25rem 1.5rem;text-align:center;color:var(--muted);font-size:13px;margin:1.5rem 0;}
+.placeholder-shot i{font-size:28px;color:var(--blue);display:block;margin-bottom:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html#projects"><i class="ti ti-arrow-left"></i> Back to portfolio</a>
+  <div class="kicker"><i class="ti ti-api"></i> Self-Directed API Penetration Test</div>
+  <h1>crAPI: chaining nine critical bugs into full account takeover</h1>
+  <p class="dek">A full, end-to-end penetration test of OWASP's crAPI (Completely Ridiculous API) — a deliberately vulnerable app built to mirror real-world microservice architecture — tested against the OWASP API Security Top 10.</p>
+  <div class="meta">
+    <span><i class="ti ti-brand-docker"></i> Docker-deployed</span>
+    <span><i class="ti ti-bug"></i> Burp Suite · Postman · jwt_tool · Wfuzz</span>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n">12</div><div class="l">Confirmed vulnerabilities</div></div>
+    <div class="stat"><div class="n">9</div><div class="l">Rated Critical</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Microservices in scope</div></div>
+  </div>
+
+  <p>crAPI is <a href="https://github.com/OWASP/crAPI" target="_blank" style="color:var(--blue-xl);">OWASP's own intentionally vulnerable API application</a>, built to reflect real API design patterns and mistakes across a realistic microservice architecture — identity, workshop/shop, community, and mechanic services — rather than one flat endpoint. I used it as a structured way to test the full OWASP API Security Top 10 (2023) against something closer to what an actual client assessment looks like.</p>
+
+  <p>Chained together, the 12 findings let a low-privilege, authenticated attacker forge an administrator session, take over any user account, harvest every registered user's PII and live location, fabricate unlimited store credit, and extract discount codes that were never issued — all without a zero-day or an advanced exploitation technique. That's the part I find most worth saying out loud: nothing here needed novel research, just patient, methodical testing against every object, function, and trust boundary in the app.</p>
+
+  <h2>Scope & Methodology</h2>
+  <table>
+    <tr><td>Target</td><td colspan="2">crAPI, deployed locally via Docker</td></tr>
+    <tr><td>Services in scope</td><td colspan="2">Identity, Workshop/Shop, Community, Mechanic microservices</td></tr>
+    <tr><td>Access level</td><td colspan="2">Authenticated low-privilege user + unauthenticated checks</td></tr>
+  </table>
+  <ul>
+    <li><strong>Reconnaissance</strong> — mapped the API surface via a Postman collection; identified microservices, versioned endpoints (v1/v2/v3), and undocumented paths.</li>
+    <li><strong>Baseline behaviour</strong> — captured known-good request/response pairs before fuzzing, so anomalies could be measured rather than guessed at.</li>
+    <li><strong>Authentication testing</strong> — JWT structure analysis, algorithm-confusion and <code>alg:none</code> attacks.</li>
+    <li><strong>Authorization testing</strong> — systematic object-ID substitution (BOLA) and HTTP-method/path fuzzing (BFLA).</li>
+    <li><strong>Business logic & injection testing</strong> — method fuzzing and SQL/NoSQL parameter fuzzing against the recorded baseline.</li>
+  </ul>
+
+  <h2>Key Findings</h2>
+  <table>
+    <tr><th>Finding</th><th>OWASP Category</th><th>Severity</th></tr>
+    <tr><td>JWT Algorithm Confusion (RS256 → HS256) — Admin Bypass</td><td>API2: Broken Authentication</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>Deprecated API Version Enables OTP Brute-Force / Takeover</td><td>API9: Improper Inventory Mgmt</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>BOLA — Vehicle Live Location Disclosure</td><td>API1: Broken Object-Level Auth</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>Mass Assignment — Fraudulent Refund/Cashback</td><td>API3: Broken Object Property Auth</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>BOLA — Mechanic Report Disclosure (incl. Admin)</td><td>API1: Broken Object-Level Auth</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>Mass Assignment — Negative Pricing / Fund Fabrication</td><td>API3: Broken Object Property Auth</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>BFLA — Unauthorized Admin Video Deletion</td><td>API5: Broken Function-Level Auth</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>NoSQL Injection — Coupon Validation</td><td>API8: Security Misconfiguration</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>SSRF — Community Post Link Handling</td><td>API7: Server-Side Request Forgery</td><td><span class="sev crit">Critical</span></td></tr>
+    <tr><td>Excessive Data Exposure — Community Posts Feed</td><td>API3: Broken Object Property Auth</td><td><span class="sev high">High</span></td></tr>
+    <tr><td>Mass Assignment — Internal Video Property Tampering</td><td>API3: Broken Object Property Auth</td><td><span class="sev high">High</span></td></tr>
+    <tr><td>Unrestricted Resource Consumption — Contact-Mechanic Flow</td><td>API4: Unrestricted Resource Consumption</td><td><span class="sev med">Medium</span></td></tr>
+  </table>
+
+  <h2>A few of these, in detail</h2>
+  <p><strong>JWT algorithm confusion → full admin bypass.</strong> crAPI issues RS256-signed JWTs but doesn't pin the expected algorithm on verification. By pulling the public key from the JWKS endpoint and re-signing a token as HS256 — using that public key itself as the HMAC secret — I forged a token asserting the <code>admin</code> role and reached the full administrator dashboard with zero valid credentials.</p>
+
+  <div class="figure">
+    <img src="assets/crapi-dashboard.png" alt="Postman request to the Get Dashboard endpoint returning a JSON response with role: ROLE ADMIN using a forged token"/>
+    <figcaption>The forged HS256 token working: <code>GET /identity/api/v2/user/dashboard</code> returns the admin account, <code>"role": "ROLE ADMIN"</code>, with zero valid admin credentials.</figcaption>
+  </div>
+
+  <p><strong>BOLA — vehicle location disclosure.</strong> The vehicle-location endpoint returned another user's live GPS coordinates whenever it was given a <code>vehicle_id</code> that didn't belong to the requester — no ownership check at all. Chained with a separate excessive-data-exposure bug that leaked every user's vehicle ID, this meant real-time location tracking of any user on the platform.</p>
+
+  <div class="figure">
+    <img src="assets/crapi-bola.png" alt="Postman request to the Get vehicle location endpoint returning another user's latitude and longitude"/>
+    <figcaption>A vehicle ID that doesn't belong to the requester, and the API hands back its live latitude/longitude anyway — no ownership check performed.</figcaption>
+  </div>
+
+  <p><strong>OTP brute-force via a deprecated API version.</strong> crAPI runs a hardened <code>v3</code> OTP-verification endpoint right alongside an unprotected, deprecated <code>v2</code> with no attempt limiting. Burp Intruder against the 10,000-value OTP space on <code>v2</code> recovered a valid code in seconds — full account takeover.</p>
+
+  <div class="figure">
+    <img src="assets/crapi-otp.png" alt="Burp Suite Intruder attack brute-forcing the OTP verification endpoint across thousands of requests"/>
+    <figcaption>Burp Intruder working through the 10,000-value OTP space on the unprotected <code>v2</code> endpoint — no rate limiting to stop it.</figcaption>
+  </div>
+
+  <h2>Root causes & remediation</h2>
+  <p>Every finding traces back to one of four root causes — the full report includes a phased 0–7 day / 1–4 week / 1–3 month remediation roadmap:</p>
+  <ul>
+    <li><strong>Never trust client-asserted identity</strong> — pin JWT algorithms server-side; never let a public key double as an HMAC secret.</li>
+    <li><strong>Verify object ownership on every request</strong>, not just at the UI layer — vehicles, orders, reports, and admin functions all need the same server-side check.</li>
+    <li><strong>Allow-list, don't deny-list</strong> — bind requests to explicit DTOs instead of the raw body to prevent mass assignment; strictly type inputs to prevent NoSQL operator injection.</li>
+    <li><strong>Maintain a live API inventory</strong> — the single biggest enabler here was a forgotten, unprotected legacy API version sitting next to a properly hardened current one.</li>
+  </ul>
+
+  <div class="callout">
+    <p>Full technical detail — request/response evidence, CVSS scoring, and remediation code for every finding — is in the complete report, downloadable below.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">API Penetration Testing</span><span class="tag">OWASP API Top 10</span><span class="tag">JWT Attacks</span>
+    <span class="tag">BOLA / BFLA</span><span class="tag">Mass Assignment</span><span class="tag">NoSQL Injection</span><span class="tag">CVSS Scoring</span>
+  </div>
+
+  <div class="cta-row">
+    <a href="https://github.com/developer-Banj/crapi-api-pentest/raw/main/crAPI_Penetration_Test_Report.pdf" class="btn btn-primary"><i class="ti ti-download"></i> Download Full Report (PDF)</a>
+    <a href="https://github.com/developer-Banj/crapi-api-pentest" target="_blank" class="btn btn-secondary"><i class="ti ti-brand-github"></i> View on GitHub</a>
+    <a href="index.html#projects" class="btn btn-secondary"><i class="ti ti-arrow-left"></i> Back to Projects</a>
+  </div>
+</div>
+</body>
+</html>
