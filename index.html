@@ -473,8 +473,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
         <div class="section-tag"><i class="ti ti-user"></i> About Me</div>
         <h3>API Security is not just what I do —<br>it's how I think.</h3>
         <p>I'm David Banjo, a cybersecurity practitioner with a foundation in enterprise networking who has narrowed my focus to what I believe is the most critical and under-tested attack surface in modern software: <strong style="color:#fff">APIs</strong>.</p>
-        <p>Coming from hands-on network engineering (Cisco ISE, 802.1X/MAB, Catalyst 9K, ASR 9000 on live MTN Nigeria infrastructure), I understand both the infrastructure layer and the application layer — which gives me a unique vantage point when assessing API security.</p>
-        <p>My current focus is drilling deep into the OWASP API Security Top 10, JWT attack chains, broken object-level authorization, and business logic flaws — and I document everything through write-ups and technical blog posts.</p>
+        <p>Backed by an enterprise-networking foundation, I understand both the infrastructure layer and the application layer — which gives me a vantage point most pure application testers don't have when assessing API security.</p>
+        <p>My current focus is drilling deep into the OWASP API Security Top 10, JWT attack chains, broken object-level authorization, and business logic flaws — with a growing focus on the security of AI-built ("vibe-coded") applications. I document everything through write-ups and technical blog posts.</p>
         <p>Longer term, I'm building a pathway to help African talent break into cybersecurity careers.</p>
         <div class="about-tags">
           <span class="tag">REST APIs</span>
@@ -573,7 +573,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
           <p>Complete exploration of JWT vulnerabilities: alg:none bypass, RS256→HS256 key confusion via JWKS endpoint abuse, and weak secret brute-force. Built custom scripts to automate token forgery.</p>
           <div class="project-tags"><span class="p-tag">jwt_tool</span><span class="p-tag">Burp Suite</span><span class="p-tag">Python</span><span class="p-tag">PortSwigger</span></div>
           <div class="project-links">
-            <a href="https://github.com/YOUR_GITHUB/jwt-attack-lab" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
+            <a href="https://github.com/developer-Banj" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
             <a href="#blog" class="primary"><i class="ti ti-book"></i> Case Study</a>
           </div>
         </div>
@@ -582,10 +582,33 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
         <div class="project-thumb"><i class="ti ti-api project-thumb-ico"></i><span class="project-thumb-label">BOLA · API</span></div>
         <div class="project-body">
           <h4>crAPI Security Assessment</h4>
-          <p>Full penetration test of the crAPI (Completely Ridiculous API) vulnerable application — covering all OWASP API Security Top 10 categories with documented methodology and findings.</p>
+          <p>Full penetration test of the crAPI (Completely Ridiculous API) vulnerable application, deployed via Docker — covering all OWASP API Security Top 10 categories with documented methodology and findings.</p>
           <div class="project-tags"><span class="p-tag">crAPI</span><span class="p-tag">BOLA</span><span class="p-tag">Postman</span><span class="p-tag">Burp Suite</span></div>
           <div class="project-links">
             <a href="https://github.com/developer-Banj/crapi-api-pentest" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card aos" style="transition-delay:0.2s">
+        <div class="project-thumb"><i class="ti ti-target project-thumb-ico"></i><span class="project-thumb-label">BOLA · Auth</span></div>
+        <div class="project-body">
+          <h4>TPay, Capital API, VAPI & VAmPI Assessments</h4>
+          <p>A set of API security write-ups against intentionally vulnerable APIs — exploiting BOLA, broken authentication, and improper asset management using the OWASP API Top 10 as the testing framework, with a documented write-up for each.</p>
+          <div class="project-tags"><span class="p-tag">BOLA</span><span class="p-tag">Broken Auth</span><span class="p-tag">Postman</span><span class="p-tag">Burp Suite</span></div>
+          <div class="project-links">
+            <a href="https://github.com/developer-Banj" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
+            <a href="#blog" class="primary"><i class="ti ti-book"></i> Write-ups</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card aos" style="transition-delay:0.3s">
+        <div class="project-thumb"><i class="ti ti-mail-opened project-thumb-ico"></i><span class="project-thumb-label">ML · NLP</span></div>
+        <div class="project-body">
+          <h4>Phishing Email Detection System</h4>
+          <p>Final-year project at Covenant University — an NLP/ML pipeline (Logistic Regression, XGBoost) that classifies phishing emails, with explainable-AI output so classifications are interpretable rather than a black box.</p>
+          <div class="project-tags"><span class="p-tag">Python</span><span class="p-tag">XGBoost</span><span class="p-tag">NLP</span><span class="p-tag">Explainable AI</span></div>
+          <div class="project-links">
+            <a href="https://github.com/developer-Banj" target="_blank"><i class="ti ti-brand-github"></i> GitHub</a>
           </div>
         </div>
       </div>
@@ -654,18 +677,18 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
       </div>
       <div class="tl-item aos" style="transition-delay:0.1s">
         <div class="tl-dot active"></div>
-        <div class="tl-date">2025 — 2026</div>
-        <div class="tl-card"><h4>Network Engineer — Treten Networks Limited</h4><p>Enterprise network engineering on live client infrastructure — Cisco ISE deployment for MTN Nigeria, 802.1X/MAB authentication, Catalyst 9K migration (IOS 12.2 → IOS-XE 17.x), and ASR 9000 inventory and capacity management across MDX and Dabengwa data centers.</p></div>
+        <div class="tl-date">Mar 2026 — Present</div>
+        <div class="tl-card"><h4>Security & QA Engineer (Self-Directed) — Treten Networks Limited</h4><p>Web-application and API penetration testing on a full-stack, multi-tenant service-management platform (ASMP) — authentication flows, JWT handling, role-based access control across customer, engineer, and admin portals. Found and helped remediate BOLA, BFLA, and mass-assignment issues in line with the OWASP API Security Top 10.</p></div>
       </div>
       <div class="tl-item aos" style="transition-delay:0.2s">
         <div class="tl-dot active"></div>
-        <div class="tl-date">2025</div>
-        <div class="tl-card"><h4>ASMP Platform — Lead Developer</h4><p>Architected and built the Automated Service Management Platform (ASMP) — a multi-portal IT service delivery system for Bayobab Networks spanning 16 African countries. Stack: Node.js / Express / PostgreSQL with role-based portals for clients, engineers, and admins.</p></div>
+        <div class="tl-date">Mar 2026 — Present</div>
+        <div class="tl-card"><h4>Network Support Engineer (Intern) — Treten Networks Limited</h4><p>Supporting deployment, configuration, and troubleshooting of enterprise network infrastructure — routers, switches, firewalls, wireless access points, and fibre connectivity — across client environments within an ISO 27001:2013-certified operation.</p></div>
       </div>
       <div class="tl-item aos" style="transition-delay:0.3s">
         <div class="tl-dot"></div>
-        <div class="tl-date">2024 — 2025</div>
-        <div class="tl-card"><h4>Technology Internship — Treten Networks</h4><p>Hands-on exposure to enterprise networking: site visits to MTN Ikoyi HQ, MDX Data Center, and Dabengwa DC. Contributed to IGW capacity expansion and IP switch replacement projects. Built foundational knowledge in network security and infrastructure.</p></div>
+        <div class="tl-date">Apr 2024 — Sep 2024</div>
+        <div class="tl-card"><h4>Cybersecurity Associate (Intern) — Taxaide Technologies</h4><p>Penetration testing on web applications and APIs (crAPI, TPay, Capital API, HackTheBox labs) — enumerating endpoints and exploiting authorization and business-logic flaws. Designed and delivered a company-wide cybersecurity awareness training programme.</p></div>
       </div>
       <div class="tl-item aos" style="transition-delay:0.4s">
         <div class="tl-dot"></div>
@@ -791,36 +814,40 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
         <div class="contact-links">
           <a class="contact-link" href="mailto:dbanjo982@gmail.com">
             <i class="ti ti-mail"></i>
-            <div class="contact-link-body"><div class="contact-link-lbl">Email</div><div class="contact-link-val">EMAIL Me</div></div>
+            <div class="contact-link-body"><div class="contact-link-lbl">Email</div><div class="contact-link-val">dbanjo982@gmail.com</div></div>
           </a>
           <a class="contact-link" href="https://linkedin.com/in/that-davidb" target="_blank">
             <i class="ti ti-brand-linkedin"></i>
-            <div class="contact-link-body"><div class="contact-link-lbl">LinkedIn</div><div class="contact-link-val">David Banjo</div></div>
+            <div class="contact-link-body"><div class="contact-link-lbl">LinkedIn</div><div class="contact-link-val">in/that-davidb</div></div>
           </a>
           <a class="contact-link" href="https://github.com/developer-Banj" target="_blank">
             <i class="ti ti-brand-github"></i>
-            <div class="contact-link-body"><div class="contact-link-lbl">GitHub</div><div class="contact-link-val">Check out my GITHUB</div></div>
+            <div class="contact-link-body"><div class="contact-link-lbl">GitHub</div><div class="contact-link-val">developer-Banj</div></div>
           </a>
           <a class="contact-link" href="https://medium.com/@dbanjo982" target="_blank">
             <i class="ti ti-brand-medium"></i>
-            <div class="contact-link-body"><div class="contact-link-lbl">Medium</div><div class="contact-link-val">Read the Blog</div></div>
+            <div class="contact-link-body"><div class="contact-link-lbl">Medium</div><div class="contact-link-val">@dbanjo982</div></div>
           </a>
         </div>
         <div class="avail-badge"><div class="avail-dot"></div> Available for engagements</div>
       </div>
       <div class="contact-form-wrap aos-right">
-        <form class="contact-form" onsubmit="handleForm(event)">
+        <form class="contact-form" id="contactForm" action="https://formsubmit.co/dbanjo982@gmail.com" method="POST" onsubmit="handleForm(event)">
+          <input type="hidden" name="_subject" value="New message from davidbanjo.sec portfolio"/>
+          <input type="hidden" name="_template" value="table"/>
+          <input type="hidden" name="_captcha" value="false"/>
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"/>
           <div class="form-row">
-            <div class="form-group"><label>Your Name</label><input type="text" placeholder="Jane Smith" required/></div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@company.com" required/></div>
+            <div class="form-group"><label>Your Name</label><input type="text" name="name" placeholder="Jane Smith" required/></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="jane@company.com" required/></div>
           </div>
           <div class="form-group">
             <label>Company / Organization</label>
-            <input type="text" placeholder="Acme Corp"/>
+            <input type="text" name="company" placeholder="Acme Corp"/>
           </div>
           <div class="form-group">
             <label>What do you need?</label>
-            <select>
+            <select name="service">
               <option value="">Select a service...</option>
               <option>API Penetration Testing</option>
               <option>OWASP API Security Assessment</option>
@@ -832,9 +859,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
           </div>
           <div class="form-group">
             <label>Message</label>
-            <textarea placeholder="Tell me about your API stack, your applications, what you're concerned about, or what you'd like assessed..."></textarea>
+            <textarea name="message" required placeholder="Tell me about your API stack, your applications, what you're concerned about, or what you'd like assessed..."></textarea>
           </div>
           <button type="submit" class="form-submit"><i class="ti ti-send"></i> Send Message</button>
+          <p id="formStatus" style="font-size:12px;color:var(--muted);margin-top:4px;min-height:16px;"></p>
         </form>
       </div>
     </div>
@@ -872,7 +900,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3r
         <h5>Resources</h5>
         <a href="https://owasp.org/API-Security/" target="_blank">OWASP API Top 10</a>
         <a href="https://portswigger.net/web-security/jwt" target="_blank">PortSwigger JWT Labs</a>
-        <a href="https://medium.com/@YOUR_MEDIUM" target="_blank">My Medium Blog</a>
+        <a href="https://medium.com/@dbanjo982" target="_blank">My Medium Blog</a>
         <a href="#" onclick="openResumeModal(event)">Download Resume</a>
         <a href="#contact">Book Assessment</a>
       </div>
@@ -1020,13 +1048,57 @@ document.getElementById('photoUpload').addEventListener('change',function(e){
   r.readAsDataURL(f);
 });
 
-/* ── FORM ── */
+/* ── FORM ──
+   Backed by FormSubmit.co — a free, no-signup email form backend.
+   The form's own action/method is a real, working POST to FormSubmit
+   (confirmed in FormSubmit's own docs), so it delivers even with
+   JavaScript disabled. On top of that, this handler tries a nicer
+   no-reload AJAX submission first; if that fails for any reason it
+   falls back to letting the plain POST go through, which still works.
+   IMPORTANT: FormSubmit requires a one-time confirmation — the FIRST
+   real submission sends a confirmation email to dbanjo982@gmail.com;
+   click the link in that email once and every submission after that
+   is delivered automatically. */
+const CONTACT_ENDPOINT='https://formsubmit.co/ajax/dbanjo982@gmail.com';
+
 function handleForm(e){
-  e.preventDefault();
-  const btn=e.target.querySelector('.form-submit');
-  btn.innerHTML='<i class="ti ti-check"></i> Message Sent!';
-  btn.style.background='#16a34a';
-  setTimeout(()=>{btn.innerHTML='<i class="ti ti-send"></i> Send Message';btn.style.background='';e.target.reset();},3000);
+  const form=e.target;
+  if(form.querySelector('[name="_honey"]').value){e.preventDefault();return;} // bot caught by honeypot
+
+  e.preventDefault(); // try the smooth AJAX path first
+  const btn=form.querySelector('.form-submit');
+  const status=form.querySelector('#formStatus');
+  const data=new FormData(form);
+  const payload={};
+  data.forEach((v,k)=>{if(k!=='_honey')payload[k]=v;});
+
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader-2"></i> Sending...';
+  status.textContent='';
+
+  fetch(CONTACT_ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(res=>{
+    if(!res.ok) throw new Error('Request failed');
+    btn.innerHTML='<i class="ti ti-check"></i> Message Sent!';
+    btn.style.background='#16a34a';
+    status.textContent="Thanks — I'll get back to you soon.";
+    form.reset();
+    setTimeout(()=>{
+      btn.disabled=false;
+      btn.innerHTML='<i class="ti ti-send"></i> Send Message';
+      btn.style.background='';
+    },3500);
+  })
+  .catch(()=>{
+    // AJAX path failed (e.g. not yet confirmed, or blocked) — fall back
+    // to a real form submission, which FormSubmit handles directly.
+    status.textContent='Sending the long way…';
+    form.submit();
+  });
 }
 
 /* ── RESUME MODAL ── */
