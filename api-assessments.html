@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Capital API & VAPI Assessments — David Banjo</title>
+<meta name="description" content="Write-up of hands-on API security assessments against the Capital (c{api}tal) and VAPI intentionally vulnerable labs, mapped to the OWASP API Security Top 10."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="assets/writeup.css"/>
+<style>
+.finding{display:flex;gap:14px;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border);}
+.finding:last-child{border-bottom:none;}
+.finding i{font-size:20px;color:var(--blue-l);margin-top:2px;flex-shrink:0;width:22px;}
+.finding h4{font-size:14.5px;font-weight:600;color:#fff;margin-bottom:3px;}
+.finding p{font-size:14px;margin-bottom:0;color:var(--muted);}
+.lab-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:1.75rem 0;}
+.lab-card h3{font-size:17px;color:#fff;font-weight:700;margin-bottom:0.5rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html#projects"><i class="ti ti-arrow-left"></i> Back to portfolio</a>
+  <div class="kicker"><i class="ti ti-api"></i> Self-Directed API Security Labs</div>
+  <h1>Breaking two deliberately-vulnerable APIs, start to finish</h1>
+  <p class="dek">A practical write-up of two assessments I ran for myself against Capital (c{api}tal) and VAPI — two apps built specifically to be broken, so I could test the OWASP API Security Top 10 end to end without touching anything real.</p>
+  <div class="meta">
+    <span><i class="ti ti-shield"></i> OWASP API Top 10</span>
+    <span><i class="ti ti-bug"></i> Burp Suite</span>
+    <span><i class="ti ti-api"></i> Postman</span>
+  </div>
+
+  <p>Reading about BOLA or mass assignment is one thing. Finding them yourself, in a live request, with your own hands on Burp Repeater, is a completely different kind of learning — the kind that sticks. So alongside my work on crAPI, I picked two more intentionally-vulnerable targets built for exactly this, and worked through each one methodically against the OWASP API Security Top 10.</p>
+
+  <div class="lab-card">
+    <h3><i class="ti ti-building-bank"></i> Capital — c{api}tal</h3>
+    <p>Capital (built by Checkmarx as a CTF for Black Hat Europe and DEF CON) is dressed up as an article-and-membership site, but underneath it's a deliberate tour of almost the entire OWASP API Top 10 in one application. I went through it endpoint by endpoint, mapping what the front end exposed against what the API itself would actually accept.</p>
+    <div class="finding"><i class="ti ti-user-x"></i><div><h4>Broken function-level authorization</h4><p>An admin-only endpoint that didn't actually check whether the caller was an admin — a regular authenticated session was enough to reach it.</p></div></div>
+    <div class="finding"><i class="ti ti-id-badge-2"></i><div><h4>Broken object-level authorization (BOLA)</h4><p>Swapping an ID in a comment-delete request let me remove a comment that belonged to a different account entirely.</p></div></div>
+    <div class="finding"><i class="ti ti-lock-open"></i><div><h4>Broken authentication</h4><p>Profile content leaked enough about a user that their password became guessable without touching the login endpoint's rate limiting at all.</p></div></div>
+    <div class="finding"><i class="ti ti-credit-card"></i><div><h4>Excessive data exposure</h4><p>The membership flow handled card data in the API responses more loosely than the UI ever let on.</p></div></div>
+    <div class="finding"><i class="ti ti-adjustments"></i><div><h4>Mass assignment</h4><p>A field that should never have been client-writable — an "admin" flag — accepted a value straight from my request body.</p></div></div>
+    <div class="finding"><i class="ti ti-database"></i><div><h4>Security misconfiguration</h4><p>An exposed internal database, reachable directly, with no business reason to be internet-facing at all.</p></div></div>
+  </div>
+
+  <div class="lab-card">
+    <h3><i class="ti ti-server-2"></i> VAPI (Vulnerable Adversely Programmed Interface)</h3>
+    <p>VAPI is a self-hosted Laravel/MySQL API built purely for this kind of training, shipped with its own Postman collection to get you authenticated fast so the actual testing can start sooner. I spun it up locally rather than against anything public, and used it to drill the categories Capital didn't cover as deeply:</p>
+    <div class="finding"><i class="ti ti-code"></i><div><h4>Injection</h4><p>Parameters that reached the database layer without the sanitization the application assumed was happening upstream.</p></div></div>
+    <div class="finding"><i class="ti ti-fingerprint"></i><div><h4>Insecure direct object reference</h4><p>Resource IDs that were sequential and unchecked — predictable enough to enumerate another user's data by just incrementing a number.</p></div></div>
+    <div class="finding"><i class="ti ti-world"></i><div><h4>CORS misconfiguration</h4><p>A response header permissive enough that a browser from an untrusted origin could still read the API's responses.</p></div></div>
+  </div>
+
+  <h2>What carried over</h2>
+  <p>The value of running both wasn't the individual bugs — those are deliberate, and documented, and meant to be found. It was building a repeatable process I still use: map the real API surface first (not just what the UI calls), test authorization on every single object and function independently rather than assuming a working login means a working permission model, and always look at what a request <em>would</em> accept, not just what the front end sends.</p>
+
+  <div class="callout">
+    <p>Note: I also ran an early assessment against TPay, a real internal payment platform at a company I interned with — that one isn't written up here, since it wasn't a public training lab and the details aren't mine to publish.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">BOLA</span><span class="tag">BFLA</span><span class="tag">Mass Assignment</span>
+    <span class="tag">IDOR</span><span class="tag">Injection</span><span class="tag">CORS</span><span class="tag">OWASP API Top 10</span>
+  </div>
+
+  <div class="cta-row">
+    <a href="index.html#projects" class="btn btn-primary"><i class="ti ti-arrow-left"></i> Back to Projects</a>
+  </div>
+</div>
+</body>
+</html>

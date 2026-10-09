@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StudioDesk Security Assessment — David Banjo</title>
+<meta name="description" content="A self-directed security assessment of StudioDesk, a 'vibe-coded' SaaS app built on Lovable — automated baseline testing plus manual authorization testing."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="assets/writeup.css"/>
+<style>
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:13.5px;}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);}
+th{color:#fff;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.4px;}
+td:first-child,th:first-child{color:#fff;}
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:10px;font-family:var(--mono);}
+.pill.ok{background:rgba(34,197,94,0.12);color:#22c55e;}
+.pill.info{background:rgba(96,165,250,0.12);color:var(--blue-xl);}
+.placeholder-shot{background:var(--card);border:1px dashed var(--border-l);border-radius:12px;padding:3rem 1.5rem;text-align:center;color:var(--muted);font-size:13px;}
+.placeholder-shot i{font-size:32px;color:var(--blue);display:block;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html#projects"><i class="ti ti-arrow-left"></i> Back to portfolio</a>
+  <div class="kicker"><i class="ti ti-sparkles"></i> Vibe-Coded App Security</div>
+  <h1>Pentesting StudioDesk: an AI-built SaaS app, taken seriously</h1>
+  <p class="dek">A lot of real products are being shipped straight out of AI app builders now, with very little security review before they reach users. I wanted to know what a proper assessment of one actually looks like — so I built a small invoicing SaaS on Lovable, branded it as "Ledgerly," and attacked it like a client engagement.</p>
+
+  <div class="figure">
+    <img src="assets/ledgerly-landing.png" alt="Ledgerly landing page — Get paid for the work, not the paperwork"/>
+    <figcaption>Ledgerly — the live app under test: a back office for design studios covering clients, invoices, and team.</figcaption>
+  </div>
+  <div class="meta">
+    <span><i class="ti ti-brandSupabase"></i> Lovable + Supabase/PostgREST</span>
+    <span><i class="ti ti-shield-check"></i> Automated + Manual</span>
+    <span><i class="ti ti-api"></i> 38 API Operations</span>
+  </div>
+
+  <p>StudioDesk (live as Ledgerly) is a multi-workspace invoicing and client-management app I built as the target itself — on Lovable, which generates a React front end and provisions a managed Supabase/PostgreSQL backend exposed through PostgREST. It supports multiple workspaces per account, workspace roles, client records, invoices, shareable client-portal links, and invitations — enough of a real authorization surface to actually be worth testing.</p>
+
+  <div class="gallery">
+    <div class="figure">
+      <img src="assets/ledgerly-invoices.png" alt="Ledgerly invoices dashboard showing outstanding, overdue and collected totals"/>
+      <figcaption>The invoices dashboard — outstanding balances, due dates, and status per client.</figcaption>
+    </div>
+    <div class="figure">
+      <img src="assets/ledgerly-clients.png" alt="Ledgerly clients page with a client record and a shareable client link"/>
+      <figcaption>Client records, each with its own shareable client-portal link — part of the authorization surface I tested.</figcaption>
+    </div>
+  </div>
+
+  <p>I split the assessment into two parts on purpose, the way I would for a client: an automated baseline first, then manual testing second. Automated tooling is fast and consistent at catching known patterns — leaked secrets, outdated dependencies, schema violations — but it can't reason about who should be allowed to see or touch whose data. That judgment needs a human, which is what Part 2 is for.</p>
+
+  <h2>Part 1 — Automated baseline</h2>
+  <p>Seven tools, run against both the client bundle and the live REST API. The API's own OpenAPI schema is generated at runtime by PostgREST, so I pulled it straight from the live backend and used it to drive Schemathesis rather than guessing at the API surface by hand.</p>
+
+  <table>
+    <tr><th>Tool</th><th>Purpose</th><th>Result</th></tr>
+    <tr><td>Semgrep</td><td>Static code-pattern analysis</td><td>7 low-confidence hits, all in vendored third-party code</td></tr>
+    <tr><td>Gitleaks</td><td>Secret scanning (source)</td><td>0 findings</td></tr>
+    <tr><td>Trivy</td><td>Vulnerable dependencies & misconfig</td><td>0 findings</td></tr>
+    <tr><td>TruffleHog</td><td>Verified, live-secret detection</td><td>0 verified secrets</td></tr>
+    <tr><td>Nuclei</td><td>Known CVEs & misconfigurations</td><td>0 matches (19-min scan)</td></tr>
+    <tr><td>Custom frontend grep</td><td>Exposed keys in client-served files</td><td>0 findings</td></tr>
+    <tr><td>Schemathesis</td><td>Schema-driven API fuzzing</td><td>1,272 test cases, 84 edge-cases triaged</td></tr>
+  </table>
+
+  <p>No high- or critical-severity issues came out of the automated pass. The most interesting result was actually a <em>positive</em> control: Schemathesis's fuzzer threw an anonymous, unauthenticated write at the <code>invoice_items</code> table using only the public anon key — and Postgres Row-Level Security correctly rejected it with a 401. That's a deliberate policy doing its job, not a vulnerability, and it's worth including precisely because it shows the baseline wasn't just "nothing broke" — something was actually standing guard.</p>
+
+  <table>
+    <tr><th>Finding</th><th>Severity</th><th>Status</th></tr>
+    <tr><td>Row-Level Security enforcement (anonymous write blocked)</td><td><span class="pill ok">Positive control</span></td><td>Confirmed working</td></tr>
+    <tr><td>Semgrep matches in vendored JS</td><td><span class="pill info">Low / Info</span></td><td>No first-party code affected</td></tr>
+    <tr><td>TRACE method missing Allow header (8 endpoints)</td><td><span class="pill info">Low (hygiene)</span></td><td>Carried into Part 2</td></tr>
+    <tr><td><code>accept_invitations</code> RPC accepts empty-body POST</td><td><span class="pill info">Low / Info</span></td><td>Flagged for manual verification</td></tr>
+  </table>
+
+  <h2>Part 2 — Manual testing (in progress)</h2>
+  <p>This is where the real work is. Automated tools can't tell you whether workspace B can see workspace A's invoices, or whether the app's AI assistant feature can be steered into doing something it shouldn't through a crafted prompt. That's cross-workspace authorization testing, business-logic abuse cases, session handling, and prompt-injection testing against the AI assistant — all done by hand, the same way I'd approach any client engagement.</p>
+
+  <div class="figure">
+    <img src="assets/ledgerly-assistant.png" alt="Ledgerly's Assistant feature answering questions about invoices from the studio's own data"/>
+    <figcaption>The app's "Assistant" — answers questions like "Which invoices are overdue?" from the studio's own data. This is exactly the kind of feature Part 2 is built to probe for prompt-injection risk.</figcaption>
+  </div>
+
+  <p>That Assistant panel is a good example of why Part 2 exists at all: an automated scanner has no way to know that feature is there, let alone try to talk it into leaking another workspace's invoices or ignoring its own instructions. That's a manual, adversarial, one-prompt-at-a-time job.</p>
+
+  <div class="callout">
+    <p><strong>Why I built this:</strong> AI app builders are shipping real, deployed products every day, often with no security review at all before real users touch them. That gap — between "it works" and "it's actually safe" — is exactly where I want to specialize.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Supabase / PostgREST</span><span class="tag">Row-Level Security</span><span class="tag">API Fuzzing</span>
+    <span class="tag">Schemathesis</span><span class="tag">Prompt Injection</span><span class="tag">Vibe-Coded Apps</span>
+  </div>
+
+  <div class="cta-row">
+    <a href="index.html#projects" class="btn btn-primary"><i class="ti ti-arrow-left"></i> Back to Projects</a>
+  </div>
+</div>
+</body>
+</html>

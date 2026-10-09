@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PhishEye — David Banjo</title>
+<meta name="description" content="PhishEye: a browser extension that flags likely phishing emails right inside your inbox, with an explainable-AI breakdown of why."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="assets/writeup.css"/>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html#projects"><i class="ti ti-arrow-left"></i> Back to portfolio</a>
+  <div class="kicker"><i class="ti ti-shield-bolt"></i> Final-Year Project · Covenant University</div>
+  <h1>PhishEye: catching phishing mail before I click</h1>
+  <p class="dek">A browser extension that sits quietly inside my inbox and tells me, email by email, how likely it is to be phishing — and shows its work.</p>
+  <div class="meta">
+    <span><i class="ti ti-brand-python"></i> Logistic Regression + XGBoost</span>
+    <span><i class="ti ti-puzzle"></i> Browser Extension</span>
+    <span><i class="ti ti-eye"></i> Explainable AI</span>
+  </div>
+
+  <p>I built PhishEye as my final-year project, and the question behind it was a simple one: most of us are told to "watch out for phishing emails," but almost nobody is told <em>what</em> in an email actually gave it away. I wanted something that would not just make a call, but show its reasoning, in plain sight, right where the email already lives.</p>
+
+  <p>So instead of a scanner you run separately, PhishEye is a small extension that sits inside the inbox itself. Next to every email in the list, it drops a small indicator — the dark square you can see sitting beside each message below. Hover over it, and it gives you an instant read: legitimate, or worth a second look.</p>
+
+  <div class="figure">
+    <img src="assets/phisheye-inbox.png" alt="Gmail inbox with the PhishEye indicator sitting next to each email"/>
+    <figcaption>PhishEye's indicator next to every email in the inbox — no need to open anything first.</figcaption>
+  </div>
+
+  <div class="gallery">
+    <div class="figure">
+      <img src="assets/phisheye-tooltip.png" alt="Hovering the PhishEye icon shows a quick verdict"/>
+      <figcaption>Hovering the icon gives a quick verdict before you even open the mail.</figcaption>
+    </div>
+    <div class="figure">
+      <img src="assets/phisheye-running.png" alt="PhishEye extension confirming it is active in the inbox"/>
+      <figcaption>A simple status popup confirms the extension is live and watching the inbox.</figcaption>
+    </div>
+  </div>
+
+  <h2>What it's actually looking at</h2>
+  <p>Under the hood, PhishEye runs on a classical NLP pipeline — a Logistic Regression model, with XGBoost explored alongside it — trained on a labelled set of phishing and legitimate emails. As best as I recall, it worked from what was already visible in the inbox view — the subject line and the message preview — rather than reaching into the full email body through the Gmail API, which kept it lightweight and kept it out of anything more sensitive than what you'd already see scrolling past.</p>
+
+  <p>The part I cared about most wasn't the prediction — it was the explanation. Click through on an email and you get a full <strong>Phish Eye Report</strong>: a confidence split between "Legitimate" and "Phishing," and underneath it, the actual words that moved the model's decision, each with its own weight.</p>
+
+  <div class="figure" style="max-width:380px;margin-left:auto;margin-right:auto;">
+    <img src="assets/phisheye-report.png" alt="PhishEye report showing a 99.68% phishing confidence score and the top contributing words"/>
+    <figcaption>A flagged email, broken down word by word — "account," "com," "remove" all pushing the score toward phishing.</figcaption>
+  </div>
+
+  <p>That's the explainable-AI piece: rather than a black-box "99% phishing" verdict, PhishEye shows you that words like <em>account</em>, <em>remove</em>, and <em>security</em> are exactly the kind of urgency-and-credential language phishing emails lean on — and lets you judge the reasoning yourself instead of just trusting the number.</p>
+
+  <div class="callout">
+    <p><strong>Why it matters to me:</strong> this project is where my interest in security and my interest in building things actually met. It's also the clearest line I can draw between "I can explain a vulnerability" and "I can ship something that protects someone from one."</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Logistic Regression</span><span class="tag">XGBoost</span><span class="tag">NLP</span>
+    <span class="tag">Explainable AI</span><span class="tag">Browser Extension</span><span class="tag">Phishing Detection</span>
+  </div>
+
+  <div class="cta-row">
+    <a href="https://phish-eye.vercel.app/" target="_blank" class="btn btn-primary"><i class="ti ti-external-link"></i> Live Project Site</a>
+    <a href="https://github.com/developer-Banj/PhishEye" target="_blank" class="btn btn-secondary"><i class="ti ti-brand-github"></i> View on GitHub</a>
+    <a href="index.html#projects" class="btn btn-secondary"><i class="ti ti-arrow-left"></i> Back to Projects</a>
+  </div>
+</div>
+</body>
+</html>
